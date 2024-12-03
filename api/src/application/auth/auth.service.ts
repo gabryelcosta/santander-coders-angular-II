@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../../domain/services/user/user.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -9,19 +10,32 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user && user.password === password) {
-      const { password, ...result } = user;
-      return result;
+  async validateUser(login: string, password: string): Promise<any> {
+    const user = await this.usersService.findOne(login);
+    if (user) {
+      const isPasswordValid = await this.comparePassword(password, user.password);
+      if (isPasswordValid) {
+        const { password, ...result } = user;
+        return result;
+      }
     }
     return null;
   }
 
+  private async comparePassword(providedPassword: string, storedPassword: string): Promise<boolean> {
+    return bcrypt.compare(providedPassword, storedPassword);
+  }
+
   async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    const userWithRole = await this.usersService.findUserRole(user.login);
+    const payload = { login: userWithRole.login, sub: userWithRole.userId, role: userWithRole.role, username: userWithRole.username };
+    try {
+      const token = this.jwtService.sign(payload);
+      return {
+        access_token: token,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Error generating JWT');
+    }
   }
 }

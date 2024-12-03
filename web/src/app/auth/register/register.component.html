@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="container-bg">
+    <h2>Registrar</h2>
+    <form (ngSubmit)="register()">
+      <mat-form-field appearance="outline" class="username-field">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="Username" [(ngModel)]="registerData.username" name="username" required>
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="login-field">
+        <mat-label>Login</mat-label>
+        <input matInput placeholder="Login" [(ngModel)]="registerData.login" name="login" required>
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="password-field">
+        <mat-label>Enter your password</mat-label>
+        <input matInput [type]="hide() ? 'password' : 'text'" [(ngModel)]="registerData.password" name="password" required/>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <button class="btn-submit" mat-flat-button type="submit">Registrar</button>
+    </form>
+    <div class="container-login">
+      <p>Já tem uma conta? <a href="/">Clique aqui para entrar</a></p>
+    </div>
+  </div>
+</div>

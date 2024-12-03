@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, InternalServerErrorException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, InternalServerErrorException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { CreateUserUseCase } from '../../../application/use-cases/create-use-cases/create-user.use-case/create-user.use-case';
 import { FindUserByIdUseCase } from '../../../application/use-cases/find-use-cases/find-user.use-case/find-user-by-id.use-case';
 import { FindAllUsersUseCase } from '../../../application/use-cases/find-use-cases/find-user.use-case/find-all-users.use-case';
 import { UpdateUserUseCase } from '../../../application/use-cases/update-use-cases/update-user.use-case/update-user.use-case';
 import { DeleteUserUseCase } from '../../../application/use-cases/delete-use-cases/delete-user.use-case/delete-user.use-case';
 import { UserEntity } from '../../../domain/entities/user/user.entity';
+import { JwtAuthGuard } from 'src/application/auth/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -25,11 +26,13 @@ export class UserController {
     return this.createUserUseCase.execute(login, username, password);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':codUser')
   async findUserById(@Param('codUser') codUser: string): Promise<UserEntity | undefined> {
     return this.findUserByIdUseCase.execute(codUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAllUsers(): Promise<UserEntity[]> {
     try {
@@ -40,6 +43,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':codUser')
   async updateUser(
     @Param('codUser') codUser: string,
@@ -49,6 +53,7 @@ export class UserController {
     return this.updateUserUseCase.execute(codUser, user, roleId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':codUser')
   async deleteUser(@Param('codUser') codUser: string): Promise<void> {
     return this.deleteUserUseCase.execute(codUser);

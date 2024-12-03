@@ -1,6 +1,5 @@
 import { UserEntity } from '../user/user.entity';
 
-
 export class Schedule {
   id: number;
   doctor: UserEntity;

@@ -7,8 +7,12 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async findOne(username: string): Promise<UserEntity | undefined> {
-    return this.userRepository.findOne(username);
+  async findOne(login: string): Promise<UserEntity | undefined> {
+    return this.userRepository.findOne(login);
+  }
+
+  async findUserRole(login: string) {
+    return this.userRepository.findUserRole(login);
   }
 
   async findById(codUser: string): Promise<UserEntity | undefined> {

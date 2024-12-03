@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Logger, InternalServerErrorException } from '@nestjs/common';
 import { AuthService } from '../../application/auth/auth.service';
 import { LocalAuthGuard } from '../../application/auth/local-auth.guard';
 
@@ -8,7 +8,12 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Body() body: { login: string; password: string }) {
+    try {
+      const result = await this.authService.login(body);
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException('Login failed');
+    }
   }
 }

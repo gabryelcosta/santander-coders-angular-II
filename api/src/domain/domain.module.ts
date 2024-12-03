@@ -8,6 +8,6 @@ import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 @Module({
   imports: [InfrastructureModule],
   providers: [AppointmentService, ScheduleService, UserService],
-  exports: [UserService],
+  exports: [UserService, AppointmentService],
 })
 export class DomainModule {}

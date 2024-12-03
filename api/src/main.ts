@@ -4,7 +4,13 @@ import { HttpExceptionFilter } from './presentation/common/filters/http-exceptio
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableCors({
+    origin: 'http://localhost:4200',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   await app.listen(3000);
 }
 bootstrap();

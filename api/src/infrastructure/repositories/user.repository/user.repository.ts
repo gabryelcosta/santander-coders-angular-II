@@ -7,9 +7,21 @@ import * as bcrypt from 'bcrypt';
 export class UserRepository {
   constructor(@Inject('KnexConnection') private readonly knex: Knex) {}
 
-  async findOne(username: string): Promise<UserEntity | undefined> {
-    const user = await this.knex('users').where({ username }).first();
+  async findOne(login: string): Promise<UserEntity | undefined> {
+    const user = await this.knex('users').where({ login }).first();
+    console.log(user);
     return user ? new UserEntity(user.id, user.codUser, user.login, user.username, user.password) : undefined;
+  }
+
+  async findUserRole(login: string): Promise<any> {
+    const user = await this.knex('users')
+      .join('user_roles', 'users.id', 'user_roles.user_id')
+      .join('roles', 'user_roles.role_id', 'roles.id')
+      .where('users.login', login)
+      .select('users.id as userId', 'users.username', 'roles.name as role')
+      .first();
+      console.log(user);
+    return user;
   }
 
   async findById(codUser: string): Promise<UserEntity | undefined> {
