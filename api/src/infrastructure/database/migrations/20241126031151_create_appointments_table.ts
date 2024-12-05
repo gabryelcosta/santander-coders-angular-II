@@ -6,6 +6,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('patient_id').unsigned().notNullable().references('id').inTable('users');
     table.integer('doctor_id').unsigned().notNullable().references('id').inTable('users');
     table.integer('schedule_id').unsigned().notNullable().references('id').inTable('schedules');
+    table.integer('specialty_id').unsigned().notNullable().references('id').inTable('specialties');
     table.timestamp('appointment_time').notNullable();
   });
 }
