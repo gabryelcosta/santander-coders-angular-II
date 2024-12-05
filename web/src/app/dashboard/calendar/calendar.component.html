@@ -1,1 +1,13 @@
-<p>calendar works!</p>
+<div class="calendar-container">
+  <div class="calendar-header">
+    <h2>{{ currentMonth }} {{ currentYear }}</h2>
+  </div>
+  <div class="calendar-grid">
+    <div class="calendar-day" *ngFor="let day of daysInMonth" [class.weekend]="isWeekend(day.dayOfWeek)" (click)="day.day !== null && !isWeekend(day.dayOfWeek) && openSidebar(day.day)">
+      <div class="day-number" *ngIf="day.day !== null">
+        {{ day.day }}
+      </div>
+      <div class="day-of-week" *ngIf="day.day !== null">{{ day.dayOfWeek }}</div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,10 @@
-<nav class="navbar">
+<nav>
   <h1>Agendamento</h1>
   <div class="container">
-    <p>Bem vindo <span class="role">{{ role }}</span>&nbsp;&nbsp;<span class="username">{{ username }}</span></p>
-    <button (click)="logout()">Logout</button>
+    <p>Bem vindo <span class="role">{{ role }}</span>&nbsp;<span class="username">{{ username }}</span></p>
+    <div class="buttons">
+      <button class="btn-register" mat-button *ngIf="role === 'Administrador'" (click)="addUser()" matTooltip="Adicionar Usuário">+</button>
+      <mat-icon class="btn-logout" mat-button (click)="logout()">logout</mat-icon>
+    </div>
   </div>
 </nav>

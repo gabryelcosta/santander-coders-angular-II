@@ -10,12 +10,17 @@ import { FindAppointmentByIdUseCase } from './use-cases/find-use-cases/find-appo
 import { FindAllAppointmentsUseCase } from './use-cases/find-use-cases/find-appointment.use-case/find-all-appointment-use-case';
 import { RescheduleAppointmentUseCase } from './use-cases/update-use-cases/update-appointment.use-case/update-appointment.use-case';
 import { DeleteAppointmentUseCase } from './use-cases/delete-use-cases/delete-appointment.use-case/delete-appointment.use-case';
+import { FindAllRoleUseCase } from './use-cases/find-use-cases/find-user.use-case/find-all-role.use-case';
+import { CreateAdminUseCase } from './use-cases/create-use-cases/create-admin.use-case/create-admin.use-case';
+import { FindAllSpecialtyUseCase } from './use-cases/find-use-cases/find-user.use-case/find-all-specialty.use-case';
+import { FindUsersBySpecialtyUseCase } from './use-cases/find-use-cases/find-user.use-case/find-users-by-specialty.use-case';
 
 
 @Module({
   imports: [DomainModule],
   providers: [
     CreateUserUseCase,
+    CreateAdminUseCase,
     FindUserByIdUseCase,
     FindAllUsersUseCase,
     UpdateUserUseCase,
@@ -23,13 +28,20 @@ import { DeleteAppointmentUseCase } from './use-cases/delete-use-cases/delete-ap
     CreateAppointmentUseCase,
     FindAppointmentByIdUseCase,
     FindAllAppointmentsUseCase,
+    FindAllRoleUseCase,
+    FindAllSpecialtyUseCase,
+    FindUsersBySpecialtyUseCase,
     RescheduleAppointmentUseCase,
     DeleteAppointmentUseCase
   ],
   exports: [
     CreateUserUseCase,
+    CreateAdminUseCase,
     FindUserByIdUseCase,
     FindAllUsersUseCase,
+    FindAllRoleUseCase,
+    FindAllSpecialtyUseCase,
+    FindUsersBySpecialtyUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
     CreateAppointmentUseCase,

@@ -22,6 +22,8 @@
 
 h2 {
   margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
 }
 
 form {
@@ -41,7 +43,8 @@ form {
 .container-login p a {
   text-decoration: none;
   color: #3f51b5;
-  font-weight: bold;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .btn-submit {

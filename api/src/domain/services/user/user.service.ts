@@ -1,7 +1,6 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../../entities/user/user.entity';
 import { UserRepository } from '../../../infrastructure/repositories/user.repository/user.repository';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -28,8 +27,12 @@ export class UserService {
   }
 
   async createUser(login: string, username: string, password: string): Promise<UserEntity> {
-    if (await this.userRepository.existsByUsername(username)) {
-      throw new BadRequestException('O nome de usuário já está em uso.');
+    if (!login || login.trim().length === 0) {
+      throw new BadRequestException('O login não pode ser vazio.');
+    }
+
+    if (!username || username.trim().length === 0) {
+      throw new BadRequestException('O nome de usuário não pode ser vazio.');
     }
 
     if (await this.userRepository.existsByLogin(login)) {

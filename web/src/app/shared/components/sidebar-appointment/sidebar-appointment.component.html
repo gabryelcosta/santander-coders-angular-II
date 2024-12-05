@@ -1,1 +1,29 @@
-<p>sidebar-appointment works!</p>
+<div class="sidebar-appointment-container">
+  <h2>Marcação para {{ data.day }} {{ data.month }} {{ data.year }}</h2>
+  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="specialty">Especialidade:</label>
+      <select id="specialty" formControlName="specialty" (change)="onSpecialtyChange($event)">
+        <option *ngFor="let specialty of specialties" [value]="specialty.id">{{ specialty.name }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="user">Medico:</label>
+      <select id="user" formControlName="user" [disabled]="!isSpecialtySelected || !!noDoctorsMessage">
+        <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+      </select>
+      <div *ngIf="noDoctorsMessage" class="no-doctors-message">{{ noDoctorsMessage }}</div>
+    </div>
+    <div>
+      <label for="date">Data:</label>
+      <input id="date" formControlName="date" [disabled]="true">
+    </div>
+    <div>
+      <label for="startTime">Hora de Início:</label>
+      <select id="startTime" formControlName="startTime">
+        <option *ngFor="let time of ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']" [value]="time">{{ time }}</option>
+      </select>
+    </div>
+    <button type="submit" [disabled]="appointmentForm.invalid">Marcar</button>
+  </form>
+</div>

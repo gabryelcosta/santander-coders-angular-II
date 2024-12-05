@@ -9,7 +9,6 @@ export class UserRepository {
 
   async findOne(login: string): Promise<UserEntity | undefined> {
     const user = await this.knex('users').where({ login }).first();
-    console.log(user);
     return user ? new UserEntity(user.id, user.codUser, user.login, user.username, user.password) : undefined;
   }
 
@@ -20,7 +19,6 @@ export class UserRepository {
       .where('users.login', login)
       .select('users.id as userId', 'users.username', 'roles.name as role')
       .first();
-      console.log(user);
     return user;
   }
 

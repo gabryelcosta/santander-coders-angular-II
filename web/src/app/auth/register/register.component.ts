@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { catchError, tap } from 'rxjs/operators';
 import { MatButtonModule } from '@angular/material/button';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -36,11 +36,11 @@ export class RegisterComponent {
         this.router.navigate(['/login']);
       }),
       catchError(error => {
-        console.error('Registro falhou', error);
-        this.snackBar.open('Registro falhou. Tente novamente!', 'Close', {
+        const errorMessage = error.error?.message?.message || 'Registro falhou. Tente novamente!';
+        this.snackBar.open(errorMessage, 'Close', {
           duration: 3000,
         });
-        return of(null);
+        return throwError(error);
       })
     ).subscribe();
   }

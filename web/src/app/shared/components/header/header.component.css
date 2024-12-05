@@ -1,0 +1,50 @@
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(20, 168, 173);
+  padding: 20px 35px;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 15px;
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-register {
+  background: rgb(29, 88, 90);
+  color: white;
+}
+
+.btn-logout {
+  color: rgb(29, 88, 90);
+}
+
+.btn-logout:hover {
+  cursor: pointer;
+  filter: brightness(1.1);
+}
+
+.role {
+  text-transform: lowercase;
+}
+
+.username {
+  font-weight: 700;
+  text-transform: capitalize;
+}

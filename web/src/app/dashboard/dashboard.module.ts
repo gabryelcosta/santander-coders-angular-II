@@ -14,6 +14,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { FooterComponent } from '../shared/components/footer/footer.component';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     CalendarComponent,
     SidebarNavComponent,
     SidebarAppointmentComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,

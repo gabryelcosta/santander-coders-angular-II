@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+  width: 100vw;
+}
+
+.container-bg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 450px;
+  height: 65%;
+  background: rgb(20, 168, 173);
+
+  border-radius: 20px;
+}
+
+.btn-arrow {
+  position: absolute;
+  top: 230px;
+  left: 710px;
+  background: none;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.container-login {
+  margin-top: 20px;
+}
+
+.container-login p {
+  text-align: center;
+}
+
+.container-login p a {
+  text-decoration: none;
+  color: #3f51b5;
+  font-weight: bold;
+}
+
+.btn-submit {
+  background-color: rgb(29, 88, 90);
+  color: white;
+}
