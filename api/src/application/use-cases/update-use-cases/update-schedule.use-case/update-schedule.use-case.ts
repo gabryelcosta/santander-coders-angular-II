@@ -1,19 +1,18 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { ScheduleService } from '../../../../domain/services/schedule/schedule.service';
-import { Schedule } from '../../../../domain/entities/schedule/schedule';
 
 @Injectable()
-export class CreateScheduleUseCase {
+export class UpdateScheduleUseCase {
   constructor(private readonly scheduleService: ScheduleService) {}
 
-  async execute(schedule: Schedule): Promise<Schedule> {
+  async execute(id: number, newDate: Date, newStartTime: string, newEndTime: string): Promise<void> {
     try {
-      return await this.scheduleService.create(schedule);
+      await this.scheduleService.update(id, newDate, newStartTime, newEndTime);
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw new BadRequestException(error.message);
       }
-      throw new Error('Erro ao criar horário');
+      throw new Error('Erro ao atualizar horário');
     }
   }
 }

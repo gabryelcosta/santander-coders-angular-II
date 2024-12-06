@@ -1,18 +1,29 @@
-import { UserEntity } from '../user/user.entity';
+import { DoctorEntity } from '../user/doctor.entity';
 
 export class Schedule {
   id: number;
-  doctor: UserEntity;
+  doctor: DoctorEntity;
+  doctorId: number;
   date: Date;
   startTime: string;
   endTime: string;
+  specialtyId: number;
 
-  constructor(id: number, doctor: UserEntity, date: Date, startTime: string, endTime: string) {
+  constructor(
+    id: number,
+    doctor: DoctorEntity,
+    date: Date,
+    startTime: string,
+    endTime: string,
+    specialtyId: number
+  ) {
     this.id = id;
     this.doctor = doctor;
+    this.doctorId = doctor.id;
     this.date = date;
     this.startTime = startTime;
     this.endTime = endTime;
+    this.specialtyId = specialtyId;
   }
 
   isFutureSchedule(): boolean {

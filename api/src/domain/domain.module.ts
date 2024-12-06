@@ -11,6 +11,6 @@ import { SpecialtyService } from './services/user/specialty.service';
 @Module({
   imports: [InfrastructureModule],
   providers: [AppointmentService, ScheduleService, UserService, RoleService, AdminService, SpecialtyService],
-  exports: [UserService, RoleService, AppointmentService, AdminService, SpecialtyService],
+  exports: [UserService, RoleService, AppointmentService, AdminService, SpecialtyService, ScheduleService],
 })
 export class DomainModule {}

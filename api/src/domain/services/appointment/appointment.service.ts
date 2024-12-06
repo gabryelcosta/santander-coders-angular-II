@@ -1,16 +1,13 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
-import { AppointmentEntity } from '../../entities/appointment/appointment';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AppointmentRepository } from '../../../infrastructure/repositories/appointment.repository/appointment.repository';
+import { AppointmentEntity } from '../../../domain/entities/appointment/appointment';
 
 @Injectable()
 export class AppointmentService {
   constructor(private readonly appointmentRepository: AppointmentRepository) {}
 
-  async findById(id: number): Promise<AppointmentEntity | undefined> {
-    const appointment = await this.appointmentRepository.findById(id);
-    if (!appointment) {
-      throw new NotFoundException('Consulta não encontrada.');
-    }
+  async create(appointment: AppointmentEntity): Promise<AppointmentEntity> {
+    await this.appointmentRepository.save(appointment);
     return appointment;
   }
 
@@ -18,57 +15,19 @@ export class AppointmentService {
     return this.appointmentRepository.findAll();
   }
 
-  async createAppointment(id: number, patientCodUser: string, doctorCodUser: string, appointmentTime: Date): Promise<AppointmentEntity> {
-    if (appointmentTime <= new Date()) {
-      throw new BadRequestException('A data e hora da consulta devem ser no futuro.');
+  async findById(id: number): Promise<AppointmentEntity> {
+    const appointment = await this.appointmentRepository.findById(id);
+    if (!appointment) {
+      throw new NotFoundException('Appointment not found');
     }
-
-    const patient = await this.appointmentRepository.findUserByCodUser(patientCodUser);
-    const doctor = await this.appointmentRepository.findUserByCodUser(doctorCodUser);
-
-    if (!patient) {
-      throw new NotFoundException('Paciente não encontrado.');
-    }
-
-    if (!doctor) {
-      throw new NotFoundException('Médico não encontrado.');
-    }
-
-    const patientRole = await this.appointmentRepository.findUserRoleByCodUser(patientCodUser);
-    const doctorRole = await this.appointmentRepository.findUserRoleByCodUser(doctorCodUser);
-
-    if (patientRole !== 'Paciente') {
-      throw new BadRequestException('O usuário especificado não é um paciente.');
-    }
-
-    if (doctorRole !== 'Medico') {
-      throw new BadRequestException('O usuário especificado não é um médico.');
-    }
-
-    const appointment = new AppointmentEntity(id, patient, doctor, appointmentTime);
-    await this.appointmentRepository.save(appointment);
     return appointment;
   }
 
-  async rescheduleAppointment(id: number, newAppointmentTime: Date): Promise<void> {
-    const appointment = await this.findById(id);
-    if (!appointment) {
-      throw new NotFoundException('Consulta não encontrada.');
-    }
-
-    if (newAppointmentTime <= new Date()) {
-      throw new BadRequestException('A nova data e hora da consulta devem ser no futuro.');
-    }
-
-    appointment.reschedule(newAppointmentTime);
+  async update(id: number, newAppointmentTime: Date): Promise<void> {
     await this.appointmentRepository.update(id, newAppointmentTime);
   }
 
-  async deleteAppointment(id: number): Promise<void> {
-    const appointment = await this.findById(id);
-    if (!appointment) {
-      throw new NotFoundException('Consulta não encontrada.');
-    }
+  async delete(id: number): Promise<void> {
     await this.appointmentRepository.delete(id);
   }
 }

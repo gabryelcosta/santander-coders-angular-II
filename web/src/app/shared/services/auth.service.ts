@@ -45,11 +45,21 @@ export class AuthService {
       const token = localStorage.getItem('token');
       if (token) {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        console.log(payload.username)
         return { role: payload.role, username: payload.username };
       }
     }
     return { role: '', username: '' };
+  }
+
+  getLoggedUserCodUser(): string {
+    if (this.isBrowser()) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.codUser;
+      }
+    }
+    return '';
   }
 
   logout(): void {

@@ -17,7 +17,7 @@ export class UserRepository {
       .join('user_roles', 'users.id', 'user_roles.user_id')
       .join('roles', 'user_roles.role_id', 'roles.id')
       .where('users.login', login)
-      .select('users.id as userId', 'users.username', 'roles.name as role')
+      .select('users.id as userId', 'users.username', 'users.codUser', 'roles.name as role')
       .first();
     return user;
   }

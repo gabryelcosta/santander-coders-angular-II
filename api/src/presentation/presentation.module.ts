@@ -5,10 +5,11 @@ import { AppointmentController } from './controllers/appointment/appointment.con
 import { RoleController } from './controllers/user/role.controller';
 import { AdminController } from './controllers/admin/admin.controller';
 import { SpecialtyController } from './controllers/user/specialty.controller';
+import { ScheduleController } from './controllers/schedule/schedule.controller';
 
 
 @Module({
   imports: [ApplicationModule],
-  controllers: [UserController, RoleController, SpecialtyController, AdminController, AppointmentController],
+  controllers: [UserController, RoleController, SpecialtyController, AdminController, AppointmentController, ScheduleController],
 })
 export class PresentationModule {}
