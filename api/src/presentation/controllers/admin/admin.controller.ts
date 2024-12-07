@@ -1,11 +1,13 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException, UseGuards } from '@nestjs/common';
 import { CreateAdminUseCase } from '../../../application/use-cases/create-use-cases/create-admin.use-case/create-admin.use-case';
 import { UserEntity } from '../../../domain/entities/user/user.entity';
+import { LocalAuthGuard } from 'src/application/auth/local-auth.guard';
 
 @Controller('admin')
 export class AdminController {
   constructor(private readonly createAdminUseCase: CreateAdminUseCase) {}
 
+  @UseGuards(LocalAuthGuard)
   @Post('create')
   async createAdmin(
     @Body('login') login: string,

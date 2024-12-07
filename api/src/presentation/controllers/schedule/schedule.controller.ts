@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { LocalAuthGuard } from 'src/application/auth/local-auth.guard';
 import { CreateScheduleUseCase } from 'src/application/use-cases/create-use-cases/create-schedule.use-case/create-schedule.use-case';
 import { DeleteScheduleUseCase } from 'src/application/use-cases/delete-use-cases/delete-schedule.use-case/delete-schedule.use-case';
 import { FindAllSchedulesUseCase } from 'src/application/use-cases/find-use-cases/find-schedule.use-case/find-all-schedules.use-case';
@@ -16,28 +17,32 @@ export class ScheduleController {
     private readonly updateScheduleUseCase: UpdateScheduleUseCase,
     private readonly deleteScheduleUseCase: DeleteScheduleUseCase
   ) {}
-
+  @UseGuards(LocalAuthGuard)
   @Post()
   async create(@Body() schedule: Schedule): Promise<Schedule> {
     return this.createScheduleUseCase.execute(schedule);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Get()
   async findAll(): Promise<Schedule[]> {
     return this.findAllSchedulesUseCase.execute();
   }
 
+  @UseGuards(LocalAuthGuard)
   @Get(':id')
   async findById(@Param('id') id: number): Promise<Schedule> {
     return this.findScheduleByIdUseCase.execute(id);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Put(':id')
   async update(@Param('id') id: number, @Body() updateData: { newDate: Date, newStartTime: string, newEndTime: string }): Promise<void> {
     const { newDate, newStartTime, newEndTime } = updateData;
     return this.updateScheduleUseCase.execute(id, newDate, newStartTime, newEndTime);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: number): Promise<void> {
     return this.deleteScheduleUseCase.execute(id);

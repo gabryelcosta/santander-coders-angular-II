@@ -1,4 +1,5 @@
-import { Controller, Get, Param, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { LocalAuthGuard } from './../../../application/auth/local-auth.guard';
+import { Controller, Get, Param, InternalServerErrorException, NotFoundException, UseGuards } from '@nestjs/common';
 import { FindAllSpecialtyUseCase } from '../../../application/use-cases/find-use-cases/find-user.use-case/find-all-specialty.use-case';
 import { FindUsersBySpecialtyUseCase } from '../../../application/use-cases/find-use-cases/find-user.use-case/find-users-by-specialty.use-case';
 import { SpecialtyEntity } from '../../../domain/entities/user/specialty.entity';
@@ -11,6 +12,7 @@ export class SpecialtyController {
     private readonly findUsersBySpecialtyUseCase: FindUsersBySpecialtyUseCase
   ) {}
 
+  @UseGuards(LocalAuthGuard)
   @Get()
   async findAll(): Promise<SpecialtyEntity[]> {
     try {
@@ -20,6 +22,7 @@ export class SpecialtyController {
     }
   }
 
+  @UseGuards(LocalAuthGuard)
   @Get(':id/users')
   async findUsersBySpecialty(@Param('id') id: number): Promise<UserEntity[]> {
     try {
