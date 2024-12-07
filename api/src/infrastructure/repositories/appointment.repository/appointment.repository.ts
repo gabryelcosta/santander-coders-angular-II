@@ -1,9 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Knex } from 'knex';
 import { AppointmentEntity } from '../../../domain/entities/appointment/appointment';
-import { UserEntity } from '../../../domain/entities/user/user.entity';
-import { DoctorEntity } from '../../../domain/entities/user/doctor.entity';
-import { SpecialtyEntity } from '../../../domain/entities/user/specialty.entity';
 
 @Injectable()
 export class AppointmentRepository {
@@ -48,13 +45,10 @@ export class AppointmentRepository {
     try {
       const appointment = await this.knex('appointments').where({ id }).first();
       if (appointment) {
-        const patient = await this.knex('users').where({ id: appointment.patient_id }).first();
-        const doctor = await this.knex('users').where({ id: appointment.doctor_id }).first();
-        const specialty = await this.knex('specialties').where({ id: appointment.specialty_id }).first();
         return new AppointmentEntity(
           appointment.id,
-          new UserEntity(patient.id, patient.codUser, patient.login, patient.username, patient.password),
-          new DoctorEntity(doctor.id, doctor.codUser, doctor.login, doctor.username, doctor.password, new SpecialtyEntity(specialty.id, specialty.name)),
+          appointment.patient_id,
+          appointment.doctor_id,
           new Date(appointment.appointment_time),
           appointment.schedule_id,
           appointment.specialty_id
@@ -68,21 +62,17 @@ export class AppointmentRepository {
   }
 
   async findAll(): Promise<AppointmentEntity[]> {
+    console.log('Finding all appointments');
     try {
       const appointments = await this.knex('appointments').select('*');
-      return Promise.all(appointments.map(async appointment => {
-        const patient = await this.knex('users').where({ id: appointment.patient_id }).first();
-        const doctor = await this.knex('users').where({ id: appointment.doctor_id }).first();
-        const specialty = await this.knex('specialties').where({ id: appointment.specialty_id }).first();
-        return new AppointmentEntity(
-          appointment.id,
-          new UserEntity(patient.id, patient.codUser, patient.login, patient.username, patient.password),
-          new DoctorEntity(doctor.id, doctor.codUser, doctor.login, doctor.username, doctor.password, new SpecialtyEntity(specialty.id, specialty.name)),
-          new Date(appointment.appointment_time),
-          appointment.schedule_id,
-          appointment.specialty_id
-        );
-      }));
+      return appointments.map(appointment => new AppointmentEntity(
+        appointment.id,
+        appointment.patient_id,
+        appointment.doctor_id,
+        new Date(appointment.appointment_time),
+        appointment.schedule_id,
+        appointment.specialty_id
+      ));
     } catch (error) {
       console.error('Error finding all appointments:', error);
       throw new Error('Error finding all appointments');
@@ -90,10 +80,12 @@ export class AppointmentRepository {
   }
 
   async update(id: number, newAppointmentTime: Date): Promise<void> {
+    console.log('Updating appointment ID:', id, 'with new time:', newAppointmentTime);
     try {
       await this.knex('appointments').where({ id }).update({
         appointment_time: newAppointmentTime,
       });
+      console.log('Appointment updated successfully');
     } catch (error) {
       console.error('Error updating appointment:', error);
       throw new Error('Error updating appointment');
@@ -101,42 +93,13 @@ export class AppointmentRepository {
   }
 
   async delete(id: number): Promise<void> {
+    console.log('Deleting appointment ID:', id);
     try {
       await this.knex('appointments').where({ id }).del();
+      console.log('Appointment deleted successfully');
     } catch (error) {
       console.error('Error deleting appointment:', error);
       throw new Error('Error deleting appointment');
-    }
-  }
-
-  async findUserByCodUser(codUser: string): Promise<UserEntity | undefined> {
-    try {
-      const user = await this.knex('users').where({ codUser }).first();
-      if (user) {
-        return new UserEntity(user.id, user.codUser, user.login, user.username, user.password);
-      }
-      return undefined;
-    } catch (error) {
-      console.error('Error finding user by codUser:', error);
-      throw new Error('Error finding user by codUser');
-    }
-  }
-
-  async findUserRoleByCodUser(codUser: string): Promise<string | undefined> {
-    try {
-      const user = await this.knex('users').where({ codUser }).first();
-      if (user) {
-        const role = await this.knex('user_roles')
-          .join('roles', 'user_roles.role_id', 'roles.id')
-          .where('user_roles.user_id', user.id)
-          .select('roles.name')
-          .first();
-        return role ? role.name : undefined;
-      }
-      return undefined;
-    } catch (error) {
-      console.error('Error finding user role by codUser:', error);
-      throw new Error('Error finding user role by codUser');
     }
   }
 }

@@ -8,6 +8,11 @@
         {{ day.day }}
       </div>
       <div class="day-of-week" *ngIf="day.day !== null">{{ day.dayOfWeek }}</div>
+      <div class="appointments" *ngIf="day.appointments.length > 0">
+        <div class="appointment" *ngFor="let appointment of day.appointments">
+          {{ appointment.description }}
+        </div>
+      </div>
     </div>
   </div>
 </div>

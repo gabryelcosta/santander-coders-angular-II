@@ -4,11 +4,12 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 interface AppointmentData {
-  patientId: number;
+  patientId: string; // Alterado para string para usar codUser
   doctorId: number;
   scheduleId: number;
   specialtyId: number;
   appointmentTime: string;
+  patientName: string; // Adicionado para exibir o nome do paciente
 }
 
 interface ScheduleData {
@@ -20,7 +21,7 @@ interface ScheduleData {
 }
 
 @Injectable({
-  providedIn: 'root'
+ providedIn: 'root'
 })
 export class AppointmentService {
   private apiUrl = `${environment.apiUrl}/appointments`;
@@ -41,6 +42,7 @@ export class AppointmentService {
       this.createSchedule(scheduleData).subscribe(
         scheduleResponse => {
           if (!scheduleResponse.id) {
+            console.error('Schedule ID missing in the response');
             observer.error('Schedule creation failed: No ID returned');
             return;
           }
@@ -49,6 +51,7 @@ export class AppointmentService {
           appointmentData.appointmentTime = `${scheduleResponse.date}T${scheduleResponse.startTime}`;
           appointmentData.doctorId = scheduleResponse.doctorId;
           appointmentData.specialtyId = scheduleResponse.specialtyId;
+          console.log('Dados da marcação:', appointmentData); // Adicionar log para verificar os dados da marcação
           this.createAppointment(appointmentData).subscribe(
             appointmentResponse => {
               observer.next(appointmentResponse);
@@ -80,5 +83,15 @@ export class AppointmentService {
 
   deleteAppointment(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
+
+  checkAppointmentConflict(date: string, startTime: string, doctorId: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/check-conflict`, {
+      params: {
+        date,
+        startTime,
+        doctorId: doctorId.toString()
+      }
+    });
   }
 }
